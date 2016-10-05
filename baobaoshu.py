@@ -11,14 +11,14 @@ prices=[]
 counts=[]
 imgUrls=[]
 
-def getLinks(articleUrl):
+def getLinks(filePath,articleUrl):
     global products, productUrls, prices, counts, imgUrls
     html = urlopen(articleUrl)
     bsObj = BeautifulSoup(html)
     getImages(imgUrls, bsObj)
     getTitle(bsObj,products,productUrls)
     getDetail(bsObj,prices,counts)
-    writeIO(products, productUrls, prices, counts, imgUrls)
+    writeIO(filePath,products, productUrls, prices, counts, imgUrls)
 
 # 完成宝宝树商品图片的抓图
 def getImages(imgUrls, bsObj):
@@ -47,11 +47,14 @@ def getDetail(bsObj,prices,counts):
             break
         # print("价格："+productDetail.ins.get_text())
         # print("销售数量："+productDetail.em.get_text())
-        prices.append(productDetail.ins.get_text())
-        counts.append(productDetail.em.get_text())
+    rices.append(productDetail.ins.get_text()) 
+   
+       counts.append(productDetail.em.get
 
-def writeIO(products, productUrls, prices, counts, imgUrls):
-    with open("C:Users//trity//Desktop//平台分析-美囤-默认.txt", "w+") as f:
+    text())
+
+def writeIO(filePath,products, productUrls, prices, counts, imgUrls):
+    with open(filePath, "w+") as f:
         f.write("| 平台  | 产品  | 销量  | 单价 | 产品图 | ")
         f.write("\n")
         f.write(
@@ -66,4 +69,4 @@ def writeIO(products, productUrls, prices, counts, imgUrls):
             f.write("|\n")
 
 
-getLinks("http://search.meitun.com/searchpage?key=%E5%AD%95%E5%A6%87%E6%8A%A4%E8%82%A4%E5%93%81") # 按销量排列时候，暂时无法找出对应的请求链接
+getLinks("C:Users//trity//Desktop//平台分析-美囤-销量.txt","http://search.meitun.com/search/itempage?key=%E5%AD%95%E5%A6%87%E6%8A%A4%E8%82%A4%E5%93%81&fcategid=&pageSize=20&pageNo=1&slprice=0&salesvolume=1&hasInventoryOnly=0&brandid=&specificationid=") # 按销量排列时候，暂时无法找出对应的请求链接

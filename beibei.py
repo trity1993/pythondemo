@@ -10,7 +10,7 @@ prices = []
 imgUrls = []
 productUrls = []
 
-def getLinks(articleUrl):
+def getLinks(filePath,articleUrl):
     global products
     global counts
     global prices
@@ -22,7 +22,7 @@ def getLinks(articleUrl):
     getTitle(bsObj, imgUrls, products)
     getPrice(bsObj, prices, counts)
     getPriceUrl(bsObj, productUrls)
-    writeIO(products, productUrls, prices, counts, imgUrls)
+    writeIO(filePath,products, productUrls, prices, counts, imgUrls)
 
 # 贝贝网商品完成+依靠商品找出对应的销售量
 
@@ -74,8 +74,8 @@ def getPriceUrl(bsObj, productUrls):
             productUrls.append(url.attrs["href"])
 
 
-def writeIO(products, productUrls, prices, counts, imgUrls):
-    with open("C:Users//trity//Desktop//平台分析-贝贝.txt", "w+") as f:
+def writeIO(filePath,products, productUrls, prices, counts, imgUrls):
+    with open(filePath, "w+") as f:
         f.write("| 平台  | 产品  | 销量  | 单价 | 产品图 | ")
         f.write("\n")
         f.write(
@@ -88,4 +88,4 @@ def writeIO(products, productUrls, prices, counts, imgUrls):
             f.write(" | " + prices[index])
             f.write(" | ![](%s)" % imgUrls[index])
             f.write("|\n")
-getLinks("http://d.beibei.com/search/item/%E5%AD%95%E5%A6%87%E6%8A%A4%E8%82%A4%E5%93%81----sale_num-1.html")
+getLinks("C:Users//trity//Desktop//平台分析-贝贝.txt","http://d.beibei.com/search/item/%E5%AD%95%E5%A6%87%E6%8A%A4%E8%82%A4%E5%93%81----sale_num-1.html")

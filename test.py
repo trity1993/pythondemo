@@ -8,6 +8,7 @@ import random
 def getLinks(articleUrl):
     html = urlopen(articleUrl)
     bsObj = BeautifulSoup(html)
+    
     print(bsObj)
     # getTitle(bsObj)
 
@@ -49,4 +50,4 @@ def getPriceUrl(bsObj):
             print("产品链接："+url.attrs["href"])
         pass
 
-getLinks("http://d.beibei.com/search/item/%E5%AD%95%E5%A6%87%E6%8A%A4%E8%82%A4%E5%93%81----sale_num-1.html")
+getLinks("http://list.mogujie.com/search?callback=jQuery211021242388869344575_1475684894493&priceList=%5B50%2C+100%2C+100%2C+150%2C+150%2C+200%5D&_version=1&_mgjuuid=b91a69e3-040c-4412-83d7-a6bde71608c6&sort=sell&cpc_offset=&cKey=pc-search-wall&page=1&q=%25E5%25AD%2595%25E5%25A6%2587%25E6%258A%25A4%25E8%2582%25A4%25E5%2593%2581&userId=&ppath=&maxPrice=&minPrice=&ratio=2%3A3&_=1475684894494")

@@ -6,12 +6,12 @@ products=[]
 productUrls=[]
 prices=[]
 
-def getLinks(articleUrl):
+def getLinks(filePath,articleUrl):
     global imgUrls,products,productUrls,prices
     html = urlopen(articleUrl)
     bsObj = BeautifulSoup(html)
     getContent(bsObj,imgUrls,products,productUrls,prices)
-    writeIO(products, productUrls, prices, imgUrls)
+    writeIO(filePath,products, productUrls, prices, imgUrls)
 
 # 贝贝网树商品完成+依靠商品找出对应的销售量
 def getContent(bsObj,imgUrls,products,productUrls,prices):
@@ -41,8 +41,8 @@ def getContent(bsObj,imgUrls,products,productUrls,prices):
         prices.append(content.find("span",{"class":"Tahoma f20 pink l blod"}).get_text())
         index=index+1
 
-def writeIO(products, productUrls, prices, imgUrls):
-    with open("C:Users//trity//Desktop//平台分析-蜜芽.txt", "w+") as f:
+def writeIO(filePath,products, productUrls, prices, imgUrls):
+    with open(filePath, "w+") as f:
         f.write("| 平台  | 产品 | 单价 | 产品图 | ")
         f.write("\n")
         f.write(
@@ -55,4 +55,4 @@ def writeIO(products, productUrls, prices, imgUrls):
             f.write(" | ![](%s)" % imgUrls[index])
             f.write("|\n")
 
-getLinks("http://www.mia.com/search/s?k=%E5%AD%95%E5%A6%87%E6%8A%A4%E8%82%A4%E5%93%81&order=sales")
+getLinks("C:Users//trity//Desktop//平台分析-蜜芽.txt","http://www.mia.com/search/s?k=%E5%AD%95%E5%A6%87%E6%8A%A4%E8%82%A4%E5%93%81&order=sales")
