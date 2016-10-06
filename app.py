@@ -11,4 +11,6 @@ with request.urlopen(req) as f:
     json_str=f.read().decode('utf-8')
     json_strip=json_str.lstrip("/**/jQuery211021242388869344575_1475684894493(").rstrip(");")
     json_success=json.loads(json_strip)
-    print(json_success['result'])
+    # print(json_success['result']['wall']['docs'])
+    for x in range(0,10):
+        print(json_success['result']['wall']['docs'][x]['link'])

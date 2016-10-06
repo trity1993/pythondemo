@@ -66,4 +66,4 @@ def writeIO(filePath,products, productUrls, prices, counts, imgUrls):
             f.write("|\n")
 
 
-getLinks("D:\python\平台分析-美囤-销量.txt","http://search.meitun.com/search/itempage?key=%E5%AD%95%E5%A6%87%E6%8A%A4%E8%82%A4%E5%93%81&fcategid=&pageSize=20&pageNo=1&slprice=0&salesvolume=1&hasInventoryOnly=0&brandid=&specificationid=") # 按销量排列时候，暂时无法找出对应的请求链接
+getLinks("D:\python\平台分析-美囤-销量.txt","http://search.meitun.com/search/itempage?key=%E5%AD%95%E5%A6%87%E6%8A%A4%E8%82%A4%E5%93%81&fcategid=&pageSize=20&pageNo=1&slprice=0&salesvolume=1&hasInventoryOnly=0&brandid=&specificationid=")
