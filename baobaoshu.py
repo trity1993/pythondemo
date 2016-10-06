@@ -47,11 +47,8 @@ def getDetail(bsObj,prices,counts):
             break
         # print("价格："+productDetail.ins.get_text())
         # print("销售数量："+productDetail.em.get_text())
-    rices.append(productDetail.ins.get_text()) 
-   
-       counts.append(productDetail.em.get
-
-    text())
+        prices.append(productDetail.ins.get_text()) 
+        counts.append(productDetail.em.get_text())
 
 def writeIO(filePath,products, productUrls, prices, counts, imgUrls):
     with open(filePath, "w+") as f:
@@ -69,4 +66,4 @@ def writeIO(filePath,products, productUrls, prices, counts, imgUrls):
             f.write("|\n")
 
 
-getLinks("C:Users//trity//Desktop//平台分析-美囤-销量.txt","http://search.meitun.com/search/itempage?key=%E5%AD%95%E5%A6%87%E6%8A%A4%E8%82%A4%E5%93%81&fcategid=&pageSize=20&pageNo=1&slprice=0&salesvolume=1&hasInventoryOnly=0&brandid=&specificationid=") # 按销量排列时候，暂时无法找出对应的请求链接
+getLinks("D:\python\平台分析-美囤-销量.txt","http://search.meitun.com/search/itempage?key=%E5%AD%95%E5%A6%87%E6%8A%A4%E8%82%A4%E5%93%81&fcategid=&pageSize=20&pageNo=1&slprice=0&salesvolume=1&hasInventoryOnly=0&brandid=&specificationid=") # 按销量排列时候，暂时无法找出对应的请求链接
