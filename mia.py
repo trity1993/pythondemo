@@ -50,7 +50,7 @@ def writeIO(filePath,products, productUrls, prices, imgUrls):
         f.write("\n")
         for index in range(0, 10):
             f.write("| 蜜芽")
-            f.write(" | [%s](%s) " % (products[index], productUrls[index]))
+            f.write(" | [%s](http://www.mia.com%s) " % (products[index], productUrls[index]))
             f.write(" | " + prices[index])
             f.write(" | ![](%s)" % imgUrls[index])
             f.write("|\n")

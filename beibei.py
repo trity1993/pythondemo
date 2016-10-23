@@ -25,8 +25,6 @@ def getLinks(filePath,articleUrl):
     writeIO(filePath,products, productUrls, prices, counts, imgUrls)
 
 # 贝贝网商品完成+依靠商品找出对应的销售量
-
-
 def getTitle(bsObj, imgUrls, products):
     index = 0
     for content in bsObj.findAll("div", {"class": "title"}):
@@ -35,36 +33,24 @@ def getTitle(bsObj, imgUrls, products):
         if "title" in content.attrs:
             product = content.attrs["title"]
             img = bsObj.find("img", {"title": product})
-            # print("产品首图："+img.attrs['src'])
-            # print("产品："+product)
 
             imgUrls.append(img.attrs['src'])
             products.append(product)
 
-            # 可选项
-            # way=content.find("span",{"class":"my-tag"})
-            # if way:
-            #     print("活动方式"+way.get_text())
-
             index = index + 1
+
 # 对应的产品销售数量+单价 优化==需要进行去掉空格和换行
-
-
 def getPrice(bsObj, prices, counts):
     index = 0
     for priceInt in bsObj.findAll("span", {"class": "price-info "}):
         if index > 11:
             break
-        # print("销量:"+priceInt.find("span",{"class":"discount"}).get_text().lstrip('\n').strip(' '))
-        # print("单价:"+priceInt.find("span",{"class":"price price-int"}).get_text()+priceInt.find("span",{"class":"price price-decimal"}).get_text().lstrip('\n').strip(' '))
-
         prices.append(priceInt.find("span", {"class": "price price-int"}).get_text().lstrip('\n').strip(
             ' ') + priceInt.find("span", {"class": "price price-decimal"}).get_text().lstrip('\n').strip(' '))
         counts.append(priceInt.find(
             "span", {"class": "discount"}).get_text().lstrip('\n').strip(' '))
 
         index = index + 1
-
 
 def getPriceUrl(bsObj, productUrls):
     index = 0
