@@ -49,7 +49,7 @@ def read_product_id(file_path):
 # 主程序调用执行
 
 # 没有填完所有的商品
-product_list=read_product_id("D:/python/product_id.txt")
+product_list=read_product_id("./product_id.txt")
 # print(len(product_list))
 for index in range(0,len(product_list)):
     # print(product_list[index].rstrip("\n"))
