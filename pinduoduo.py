@@ -33,13 +33,25 @@ def request_url(product_id):
         time=int(expire_time)-server_time
         now=datetime.now() # 得到当前时间
         future_time=now+timedelta(hours=time/3600)
+        print("product_id:",product_id)
         print("nickName:",dict_map["nickname"])
         print(future_time)
+
+def read_product_id(file_path):
+    file_object = open(file_path) 
+    try: 
+      all_the_text = file_object.readlines() 
+      # print(all_the_text) 
+      return all_the_text
+    finally: 
+      file_object.close() 
 
 # 主程序调用执行
 
 # 没有填完所有的商品
-product_list=["729878-6224262","729888-6224323","729945-6224466","729947-6224468"]
+product_list=read_product_id("D:/python/product_id.txt")
+# print(len(product_list))
 for index in range(0,len(product_list)):
-    request_url(product_list[index])
+    # print(product_list[index].rstrip("\n"))
+    request_url(product_list[index].rstrip("\n"))
 
