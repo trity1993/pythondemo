@@ -73,6 +73,7 @@ for index in range(0,len(product_list)):
             product_group.append(tmp_test)
         product_group.append("\n")
     
-    if len(product_group):
-        write_product_spell_group(product_group)
+if len(product_group):
+    print(product_group)
+    write_product_spell_group(product_group)
 
