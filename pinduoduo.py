@@ -2,6 +2,10 @@ import requests
 import json
 from datetime import datetime, timedelta
 
+'''
+抓取拼多多中开团的部分
+'''
+
 # 输出测试
 def request_url_print(product_id):
     url = "http://apiv2.yangkeduo.com/goods/%s/local_group" % product_id
@@ -69,7 +73,7 @@ for index in range(0,len(product_list)):
     tmp=request_url(product_list[index].strip())
     if tmp:
         for(k,v) in tmp.items():
-            tmp_test=str(k)+":"+str(v.strip('\ue035').strip('\U0001f48b').strip('\U0001f495'))
+            tmp_test=str(k)+":"+str(v.strip('\ue035').strip('\U0001f48b').strip('\U0001f495').strip('\U0001f459'))
             product_group.append(tmp_test)
         product_group.append("\n")
     
