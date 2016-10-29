@@ -32,6 +32,7 @@ def request_product(product_id):
     return json_raw["goods_name"]
 
 def request_url(product_id):
+    product_list=[]
     url = "http://apiv2.yangkeduo.com/goods/%s/local_group" % product_id
     r = requests.get(url)
     json_raw = r.json()
@@ -47,9 +48,10 @@ def request_url(product_id):
         future_time=now+timedelta(hours=time/3600)
         product_url="http://mobile.yangkeduo.com/goods.html?goods_id=%s" % product_id
         product_name=request_product(product_id)
-        # print("nickName:",dict_map["nickname"])
-        # print(future_time)
-        return dict(url=product_url,name=product_name,nickName=dict_map["nickname"],finish_time=future_time.strftime('%Y-%m-%d %H:%M:%S'))
+
+        product_list.append(dict(url=product_url,name=product_name,nickName=dict_map["nickname"],finish_time=future_time.strftime('%Y-%m-%d %H:%M:%S')))
+        # return dict(url=product_url,name=product_name,nickName=dict_map["nickname"],finish_time=future_time.strftime('%Y-%m-%d %H:%M:%S'))
+    return product_list
 
 # 读取商品列表
 def read_product_id(file_path):
@@ -71,11 +73,13 @@ product_list=read_product_id("./product_id.txt")
 product_group=[]
 for index in range(0,len(product_list)):
     tmp=request_url(product_list[index].strip())
-    if tmp:
-        for(k,v) in tmp.items():
-            tmp_test=str(k)+":"+str(v.strip('\ue035').strip('\U0001f48b').strip('\U0001f495').strip('\U0001f459'))
-            product_group.append(tmp_test)
-        product_group.append("\n")
+
+    for index_tmp in range(0,len(tmp)):
+        if tmp[index_tmp]:
+            for(k,v) in tmp[index_tmp].items():
+                tmp_data=str(k)+":"+str(v.strip('\ue035').strip('\U0001f48b').strip('\U0001f495').strip('\U0001f459'))
+                product_group.append(tmp_data)
+            product_group.append("\n")
     
 if len(product_group):
     print(product_group)
