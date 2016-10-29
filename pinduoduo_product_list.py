@@ -1,4 +1,4 @@
-from urllib import request
+import requests
 import json
 import datetime
 
@@ -13,38 +13,42 @@ prices=[]
 counts=[]
 imgUrls=[]
 
-def getLinks(filePath,articleUrl):
+def getLinks(filePath,shop_url):
     global products, productUrls, prices, counts, imgUrls
-    req=request.Request(articleUrl)
+    req=requests.get(shop_url).json()
     getContent(products, productUrls, prices, counts, imgUrls,req)
     writeIO(filePath,products, productUrls, prices, counts, imgUrls)
 
-# 完成蘑菇街ajax的json数据抓取
 def getContent(products, productUrls, prices, counts, imgUrls, req):
-    with request.urlopen(req) as f:
-        json_origin=f.read().decode('utf-8')
-        json_filter=json_origin.lstrip("/**/jQuery211021242388869344575_1475684894493(").rstrip(");")
-        json_success=json.loads(json_filter)
-        for x in range(0,10):
-            productUrls.append(json_success['result']['wall']['docs'][x]['link'])
-            products.append(json_success['result']['wall']['docs'][x]['title'])
-            prices.append(json_success['result']['wall']['docs'][x]['price'])
-            counts.append(json_success['result']['wall']['docs'][x]['cfav']) # 无法看到销量，收藏代替
-            imgUrls.append(json_success['result']['wall']['docs'][x]['img'])
+    product_list=req["goods_list"]
+    length=len(product_list)
+    for index in range(0,length):
+        productUrls.append("http://mobile.yangkeduo.com/goods.html?goods_id=%d" % product_list[index]["goods_id"] )
+        products.append(product_list[index]["goods_name"])
+        imgUrls.append(product_list[index]["thumb_url"])
+        counts.append(product_list[index]["cnt"])
+        prices.append("常规价: %.2f,开团价格: %.2f "% (product_list[index]["normal_price"]/100,product_list[index]["group"]["price"]/100))
 
 def writeIO(filePath,products, productUrls, prices, counts, imgUrls):
     with open(filePath, "w+") as f:
-        f.write("| 平台  | 产品数量  | 收藏  | 单价 | 产品图 | ")
+        f.write("| 产品  | 销售数量  | 价格 | 产品图 | ")
         f.write("\n")
         f.write(
-            "| ------------ | ------------ | ------------ | ------------ | ------------ | ")
+            "| ------------ | ------------ | ------------ | ------------ | ")
         f.write("\n")
-        for index in range(0, 10):
-            f.write("| 袋鼠妈妈")
+        for index in range(0, len(products)):
             f.write(" | [%s](%s) " % (products[index], productUrls[index]))
             f.write(" | " + str(counts[index])+" | ")
             f.write(str(prices[index]))
             f.write(" | ![](%s)" % imgUrls[index])
             f.write("|\n")
+    # 清空设置操作
+    products.clear()
+    productUrls.clear()
+    prices.clear()
+    counts.clear()
+    imgUrls.clear()
 
-getLinks("D:\python\袋鼠妈妈-价格列表.txt","http://api-static.yangkeduo.com/operation/37/groups?opt_type=3&offset=0&size=100")
+id_dict=dict(袋鼠妈妈=14844,子初=6135,五羊=7477)
+for (k,v) in id_dict.items():
+    getLinks("D:\python\%s-价格列表.txt" % k,"http://api-static.yangkeduo.com/v2/mall/%d/goods?page=1&size=50&sort_type=GMV" % v)
