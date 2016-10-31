@@ -1,6 +1,24 @@
-url:http://mobile.yangkeduo.com/goods.html?goods_id=776292-6798007
-nickName:娟子
-name:亲恩孕妇护肤品气垫BB霜6件套补水美颜孕妇化妆品
-finish_time:2016-10-30 11:29:14
+nickName:雪殇
+finish_time:2016-10-31 20:37:06
+url:http://mobile.yangkeduo.com/goods.html?goods_id=767966-6688917
+name:亲恩 孕妇橄榄油120ml 孕纹产前预防产后淡化修护
+
+
+nickName:马焕
+finish_time:2016-10-31 21:03:10
+url:http://mobile.yangkeduo.com/goods.html?goods_id=776058-6795408
+name:亲恩孕妇护肤品4件套孕妇化妆品补水遮瑕
+
+
+nickName:小李妹儿
+finish_time:2016-10-31 21:04:44
+url:http://mobile.yangkeduo.com/goods.html?goods_id=776058-6795408
+name:亲恩孕妇护肤品4件套孕妇化妆品补水遮瑕
+
+
+nickName:蒋霞15266741395
+finish_time:2016-10-31 19:56:26
+url:http://mobile.yangkeduo.com/goods.html?goods_id=776063-6795452
+name:亲恩孕妇护肤品套装孕妇化妆品套装补水哺乳期
 
 
