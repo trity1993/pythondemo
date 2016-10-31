@@ -32,6 +32,8 @@ def request_product(product_id):
     return json_raw["goods_name"]
 
 def request_url(product_id):
+    if len(product_id)==0:
+        return None
     product_list=[]
     url = "http://apiv2.yangkeduo.com/goods/%s/local_group" % product_id
     r = requests.get(url)
@@ -73,13 +75,13 @@ product_list=read_product_id("./product_id.txt")
 product_group=[]
 for index in range(0,len(product_list)):
     tmp=request_url(product_list[index].strip())
-
-    for index_tmp in range(0,len(tmp)):
-        if tmp[index_tmp]:
-            for(k,v) in tmp[index_tmp].items():
-                tmp_data=str(k)+":"+str(v.strip('\ue035').strip('\U0001f48b').strip('\U0001f495').strip('\U0001f459'))
-                product_group.append(tmp_data)
-            product_group.append("\n")
+    if tmp:
+        for index_tmp in range(0,len(tmp)):
+            if tmp[index_tmp]:
+                for(k,v) in tmp[index_tmp].items():
+                    tmp_data=str(k)+":"+str(v.strip('\ue035').strip('\U0001f48b').strip('\U0001f495').strip('\U0001f459'))
+                    product_group.append(tmp_data)
+                product_group.append("\n")
     
 if len(product_group):
     print(product_group)
