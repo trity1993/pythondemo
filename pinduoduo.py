@@ -47,8 +47,7 @@ def request_url(product_id):
     length = len(json_raw["local_group"])
     for index in range(0, length):
         dict_str = json_raw["local_group"][index]
-        dict_str_filter = re.sub(
-            r'\b\\U\d{3}[a-f0-9]{5}|\b\\ue\w{3}', '', dict_str)# 过滤昵称使用特殊符号无法显示的情况。
+        dict_str_filter = re.sub(r'\\U\d{3}[a-f0-9]{5}|\\ue\w{3}', '', dict_str)# 过滤昵称使用特殊符号无法显示的情况。
         dict_map = json.loads(dict_str_filter)
         expire_time = dict_map["expire_time"]
         time = int(expire_time) - server_time
