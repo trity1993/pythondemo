@@ -43,12 +43,13 @@ def request_url(product_id):
     url = "http://apiv2.yangkeduo.com/goods/%s/local_group" % product_id
     r = requests.get(url)
     json_raw = r.json()
-    server_time = json_raw['server_time']
+    server_time = json_raw['server_time'] # 得到服务器时间
     length = len(json_raw["local_group"])
     for index in range(0, length):
         dict_str = json_raw["local_group"][index]
         dict_str_filter = re.sub(r'\\U\d{3}[a-f0-9]{5}|\\ue\w{3}', '', dict_str)# 过滤昵称使用特殊符号无法显示的情况。
         dict_map = json.loads(dict_str_filter)
+        # 计算对应的时间
         expire_time = dict_map["expire_time"]
         time = int(expire_time) - server_time
         now = datetime.now()  # 得到当前时间
@@ -69,14 +70,14 @@ def read_product_id(file_path):
 
 
 def write_product_spell_group(info_list):
-    with open("./product_spell_group.txt", "w+") as f:
+    with open("./product_pinduoduo_spell_group.txt", "w+",encoding='utf-8') as f:
         for index in range(0, len(info_list)):
             f.write(info_list[index] + "\n")
 
 
 # 主程序调用执行
 
-product_list = read_product_id("./product_id.txt")
+product_list = read_product_id("./product_pinduoduo_id.txt")
 product_group = []
 for index in range(0, len(product_list)):
     tmp = request_url(product_list[index].strip())
