@@ -54,7 +54,7 @@ def writeIO(filePath, products, productUrls, prices, counts, imgUrls):
     counts.clear()
     imgUrls.clear()
 
-id_dict = dict(袋鼠妈妈=14844, 子初=6135, 五羊=7477,孕蓓=17177)
+id_dict = dict(袋鼠妈妈=14844, 子初=6135, 五羊=7477, 孕蓓=17177)
 for (k, v) in id_dict.items():
     getLinks("D:\python\%s-价格列表.txt" %
              k, "http://api-static.yangkeduo.com/v2/mall/%d/goods?page=1&size=50&sort_type=GMV" % v)

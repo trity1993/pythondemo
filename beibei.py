@@ -74,4 +74,5 @@ def writeIO(filePath,products, productUrls, prices, counts, imgUrls):
             f.write(" | " + prices[index])
             f.write(" | ![](%s)" % imgUrls[index])
             f.write("|\n")
-getLinks("D:\python\平台分析-贝贝.txt","http://d.beibei.com/search/item/%E5%AD%95%E5%A6%87%E6%8A%A4%E8%82%A4%E5%93%81----sale_num-1.html")
+# getLinks("D:\python\平台分析-贝贝.txt","http://d.beibei.com/search/item/%E5%AD%95%E5%A6%87%E6%8A%A4%E8%82%A4%E5%93%81----sale_num-1.html")
+getLinks("D:\python\平台分析-贝贝.txt","http://d.beibei.com/search/%E4%BA%B2%E6%81%A9-.html")

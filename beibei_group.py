@@ -15,17 +15,6 @@ def request_url_print(product_id):
     r = requests.get(url)
     json_raw = json.loads(r.text.lstrip("BeibeiItemDetailGet(").rstrip(")"))
     print(json_raw['title'])
-    # 服务器实践，没有保证与服务器时间对接的准确性
-    # print("server_time:" + str(json_raw['server_time']))
-    # length = len(json_raw["local_group"])
-    # print(length)  # 当有多个开团的情况有用。
-    # for index in range(0, length):
-    #     dict_str = json_raw["local_group"][index]
-
-    #     dict_map = json.loads(dict_str)
-    #     print(dict_map["group_order_id"])
-    #     for (k, v) in dict_map.items():
-    #         print(k, v)
 
 # 加载对应的商品列表详情
 
