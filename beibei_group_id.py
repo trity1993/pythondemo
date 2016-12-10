@@ -4,7 +4,7 @@ import re
 from datetime import datetime, timedelta
 
 '''
-抓取拼多多中所有拼团产品的id
+抓取贝贝网中所有拼团产品的id
 '''
 
 

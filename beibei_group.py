@@ -4,7 +4,7 @@ import re
 from datetime import datetime, timedelta
 
 '''
-抓取拼多多中开团的部分
+抓取贝贝网中开团的部分
 '''
 
 # 输出测试
