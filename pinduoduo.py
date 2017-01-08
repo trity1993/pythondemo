@@ -39,18 +39,19 @@ def request_product(product_id, goods_item_price=0):
         if group_product_item[x]["customer_num"] == 2:
             goods_item_price = group_product_item[x]["price"]
 
-    return json_raw["goods_name"], goods_item_price  # 返回商品名称和价格
+    return json_raw["goods_name"], goods_item_price / 100  # 返回商品名称和价格
 
 
-def request_url(product_id):
-    if len(product_id) == 0:
-        return None
+def request_url(product_id, goods_item_price_sum=0):
+    if len(product_id) == 0:  # 判断分割好的情况
+        return goods_item_price_sum, None
     product_list = []  # 存储多个开团的情况
     url = "http://apiv2.yangkeduo.com/goods/%s/local_group" % product_id
     r = requests.get(url)
     json_raw = r.json()
     server_time = json_raw['server_time']  # 得到服务器时间
     length = len(json_raw["local_group"])
+
     for index in range(0, length):
         dict_str = json_raw["local_group"][index]
         dict_str_filter = re.sub(
@@ -64,13 +65,14 @@ def request_url(product_id):
         product_url = "http://mobile.yangkeduo.com/goods.html?goods_id=%s" % product_id
         product_name, product_price = request_product(product_id)
 
-        # print("价格为" + str(product_price / 100))
+        goods_item_price_sum = goods_item_price_sum + product_price  # 逐个求和
+
         product_info = product_url + "\r\n" + product_name + "\r\n" + dict_map["nickname"] + "\r\n" + str(
-            product_price / 100) + "\r\n" + future_time.strftime('%Y-%m-%d %H:%M:%S') + "\r\n"
+            product_price) + "\r\n" + future_time.strftime('%Y-%m-%d %H:%M:%S') + "\r\n"
 
         product_list.append(dict(product_info=product_info,
                                  time_stamp=time))
-    return product_list
+    return goods_item_price_sum, product_list
 
 # 读取商品列表
 
@@ -86,21 +88,49 @@ def write_product_spell_group(info_list):
             f.write(info_list[index]["product_info"] + "\n")
 
 
+def product_sort_sum(product_group, product_sum_qinn,product_sum_lan):
+    if len(product_group):
+        L = sorted(product_group, key=lambda s: s["time_stamp"])
+
+        L.append(dict(product_info="亲恩总金额：" + str(product_sum_qinn)))
+        L.append(dict(product_info="兰可欣总金额：" + str(product_sum_lan)))
+
+        write_product_spell_group(L)
+    else:
+        print(product_group.append("暂时无任何的开团情况"))
+
+
 # 主程序调用执行
 
 product_list = read_product_id("./product_pinduoduo_id.txt")
-product_group = []
+product_group_qinn = []
+product_group_lan = []
 product_str = ""
+product_sum_qinn =0
+product_sum_lan = 0
+flag = True
 for index in range(0, len(product_list)):
-    tmp = request_url(product_list[index].strip())
+    goods_item_price_sum, tmp = request_url(product_list[index].strip())
     if tmp:
         for index_tmp in range(0, len(tmp)):
-            if tmp[index_tmp]:
-                product_group.append(tmp[index_tmp])
+            if flag:
+                if tmp[index_tmp]:
+                    product_group_qinn.append(tmp[index_tmp])
+                    product_sum_qinn = goods_item_price_sum + product_sum_qinn
+            else:
+                if tmp[index_tmp]:
+                    product_group_lan.append(tmp[index_tmp])
+                    product_sum_lan = goods_item_price_sum + product_sum_lan
+    elif tmp is None:
+        flag = False
 
-if len(product_group):
-    L=sorted(product_group, key=lambda s: s["time_stamp"])
-    print(L)
-    write_product_spell_group(L)
-else:
-    print(product_group.append("暂时无任何的开团情况"))
+product_group_qinn.extend(product_group_lan) # 使用extend合并list
+product_sort_sum(product_group_qinn, product_sum_qinn,product_sum_lan)
+
+# if len(product_group):
+#     L = sorted(product_group, key=lambda s: s["time_stamp"])
+#     # print(L)
+#     L.append(dict(product_info=str(product_sum)))
+#     write_product_spell_group(L)
+# else:
+#     print(product_group.append("暂时无任何的开团情况"))
