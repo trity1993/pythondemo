@@ -23,15 +23,22 @@ class Application(Frame):
 
     def compress_img(self,num):
         im = Image.open(file_old)
-        im.save(file_new,quality=int(num)) # 默认quality=75
+        n=100
+        while n>0:
+            im.save(file_new,quality=int(n)) # 默认quality=75
+            news=os.path.getsize(file_new)/1024 
+            print("质量=%d,大小=%f"%(n,news))
+            if news<num:
+                break
+            n=n-1    
+        
         olds=os.path.getsize(file_old)/1024
-        news=os.path.getsize(file_new)/1024
         return olds,news
 
     def calculate(self):
-        num=self.numInput.get() or '100' # 不输入的情况下为100
+        num=self.numInput.get().strip() or '100' # 不输入的情况下为100
         # 进行 image的生成并计算
-        messagebox.showinfo('Message','原来大小：%.2f,压缩输大小为：%.2f' % self.compress_img(num))
+        messagebox.showinfo('Message','原来大小：%.2f,压缩输大小为：%.2f' % self.compress_img(int(num)))
 
 app = Application()
 # 设置窗口标题:
