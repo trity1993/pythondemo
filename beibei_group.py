@@ -44,8 +44,9 @@ def request_url(product_id):
         product_url = "http://m.beibei.com/mpt/group/detail.html?iid=%s" % product_id
         product_name = request_product(product_id)
 
-        product_list.append(dict(url=product_url, name=product_name, nickName=dict_map[
-                            "nick"], finish_time=datetime.fromtimestamp(dict_map["gmt_end"]).strftime('%Y-%m-%d %H:%M:%S')))
+        product_info=product_url+ "\r\n"+product_name+ "\r\n"+dict_map["nick"]+"\r\n"+datetime.fromtimestamp(dict_map["gmt_end"]).strftime('%Y-%m-%d %H:%M:%S')
+
+        product_list.append(dict(info=product_info,time=dict_map["gmt_end"]-dict_map["gmt_begin"]))
     return product_list
 
 # 读取商品列表
@@ -69,13 +70,19 @@ product_list = read_product_id("./product_beibei_id.txt")
 product_group = []
 for index in range(0, len(product_list)):
     tmp = request_url(product_list[index].strip())
+   
     if tmp:
-        for index_tmp in range(0, len(tmp)):
-            if tmp[index_tmp]:
-                for(k, v) in tmp[index_tmp].items():
-                    product_group.append(v)
+        # 排序
+        L=sorted(tmp, key=lambda s: s["time"])
+        for index_tmp in range(0, len(L)):
+            if L[index_tmp]:
+                # print("test=",L[index_tmp]["info"])
+                product_group.append(L[index_tmp]["info"])
                 product_group.append("\n")
 
 if len(product_group):
+    # pass
     print(product_group)
     write_product_spell_group(product_group)
+else:
+    write_product_spell_group(product_group.append("暂无拼团数据"))    
