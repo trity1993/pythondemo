@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 '''
 抓取贝贝网中所有拼团产品的id
 思路是通过找到其中一个拼团，然后通过商品推荐去找下一个拼团，递归后树形最后比对跳出
+没请求一次，做一次运算来进行请求签名一次。所以下一页无法简单的加载进来
 '''
 str_activity_flag="拼团"
 

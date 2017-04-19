@@ -2,13 +2,14 @@ import requests
 import json
 import re
 from datetime import datetime, timedelta
+from tkinter import *
+from tkinter.filedialog import askopenfilename
 
 '''
 抓取拼多多中开团的部分
 '''
 
 # 输出测试
-
 
 def request_url_print(product_id):
     url = "http://apiv2.yangkeduo.com/goods/%s/local_group" % product_id
@@ -90,7 +91,8 @@ def write_product_spell_group(info_list):
 
 def product_sort_sum(product_group, product_sum_qinn,product_sum_lan):
     if len(product_group):
-        L = sorted(product_group, key=lambda s: s["time_stamp"])
+        # L = sorted(product_group, key=lambda s: s["time_stamp"]) # 依靠时间排序
+        L=product_group
 
         L.append(dict(product_info="亲恩总金额：" + str(product_sum_qinn)))
         L.append(dict(product_info="兰可欣总金额：" + str(product_sum_lan)))
@@ -101,31 +103,46 @@ def product_sort_sum(product_group, product_sum_qinn,product_sum_lan):
 
 
 # 主程序调用执行
+def function_main_scrap(file_source_name):
+    product_list = read_product_id(file_source_name)
+    product_group_qinn = []
+    product_group_lan = []
+    product_str = ""
+    product_sum_qinn =0
+    product_sum_lan = 0
+    flag = True
+    for index in range(0, len(product_list)):
+        goods_item_price_sum, tmp = request_url(product_list[index].strip())
+        if tmp:
+            for index_tmp in range(0, len(tmp)):
+                if flag:
+                    if tmp[index_tmp]:
+                        product_group_qinn.append(tmp[index_tmp])
+                        product_sum_qinn = goods_item_price_sum + product_sum_qinn
+                else:
+                    if tmp[index_tmp]:
+                        product_group_lan.append(tmp[index_tmp])
+                        product_sum_lan = goods_item_price_sum + product_sum_lan
+        elif tmp is None:
+            flag = False
 
-product_list = read_product_id("./product_pinduoduo_id.txt")
-product_group_qinn = []
-product_group_lan = []
-product_str = ""
-product_sum_qinn =0
-product_sum_lan = 0
-flag = True
-for index in range(0, len(product_list)):
-    goods_item_price_sum, tmp = request_url(product_list[index].strip())
-    if tmp:
-        for index_tmp in range(0, len(tmp)):
-            if flag:
-                if tmp[index_tmp]:
-                    product_group_qinn.append(tmp[index_tmp])
-                    product_sum_qinn = goods_item_price_sum + product_sum_qinn
-            else:
-                if tmp[index_tmp]:
-                    product_group_lan.append(tmp[index_tmp])
-                    product_sum_lan = goods_item_price_sum + product_sum_lan
-    elif tmp is None:
-        flag = False
+    product_group_qinn.extend(product_group_lan) # 使用extend合并list
+    product_sort_sum(product_group_qinn, product_sum_qinn,product_sum_lan)
 
-product_group_qinn.extend(product_group_lan) # 使用extend合并list
-product_sort_sum(product_group_qinn, product_sum_qinn,product_sum_lan)
+
+def load_file():
+    fname = askopenfilename(filetype=(("txt files", "*.txt"),("HTML files", "*.html;*.htm"))) #获取到对应的file路径
+    path.set(fname)
+    function_main_scrap(fname)
+
+root = Tk()
+path = StringVar()
+
+Label(root,text = "目标路径:").grid(row = 0, column = 0)
+Entry(root, textvariable = path).grid(row = 0, column = 1)
+Button(root, text = "路径选择", command = load_file).grid(row = 0, column = 2)
+
+root.mainloop()
 
 # if len(product_group):
 #     L = sorted(product_group, key=lambda s: s["time_stamp"])
