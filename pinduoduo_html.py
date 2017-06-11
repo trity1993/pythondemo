@@ -11,8 +11,6 @@ from tkinter.filedialog import askopenfilename
 '''
 
 # 输出测试
-
-
 def request_url_print(product_id):
     url = "http://mobile.yangkeduo.com/goods.html?goods_id=%s" % product_id
     r = requests.get(url)
@@ -40,7 +38,6 @@ def request_url_print(product_id):
 
 # 加载对应的商品列表详情
 
-
 def request_url(product_id, goods_item_price_sum=0):
     if len(product_id) == 0:  # 判断分割好的情况
         return goods_item_price_sum, None
@@ -65,8 +62,6 @@ def request_url(product_id, goods_item_price_sum=0):
     return goods_item_price_sum, product_list  # 返回总金额，商品信息列表
 
 # 获取商品信息
-
-
 def request_product(product_id, goods_item_price=0):
     product_id_list=product_id
     url = "http://apiv2.yangkeduo.com/v2/goods/%s" % product_id_list
@@ -84,14 +79,16 @@ def read_product_id(file_path):
     with open(file_path) as file_object:
         return file_object.readlines()
 
-
-def write_product_spell_group(info_list):
-    with open("./product_pinduoduo_spell_group.txt", "w+", encoding='utf-8') as f:
+# 输出拼团的信息
+def write_product_spell_group(info_list,file_source_name):
+    now=datetime.now()
+    output_str=file_source_name.split("/")[-1][:-4]+now.strftime('-%y-%m-%d-%H')+".txt"
+    with open("./pdd_output/%s" % output_str, "w+", encoding='utf-8') as f:
         for index in range(0, len(info_list)):
             f.write(info_list[index]["product_info"] + "\n")
 
-
-def product_sort_sum(product_group, product_sum_qinn, product_sum_lan):
+# 计算金额和排序
+def product_sort_sum(product_group, product_sum_qinn, product_sum_lan,file_source_name):
     if len(product_group):
         # L = sorted(product_group, key=lambda s: s["time_stamp"]) # 依靠时间排序
         L = product_group
@@ -99,7 +96,7 @@ def product_sort_sum(product_group, product_sum_qinn, product_sum_lan):
         L.append(dict(product_info="亲恩总金额：" + str(product_sum_qinn)))
         L.append(dict(product_info="兰可欣总金额：" + str(product_sum_lan)))
 
-        write_product_spell_group(L)
+        write_product_spell_group(L,file_source_name)
     else:
         print(product_group.append("暂时无任何的开团情况"))
 
@@ -129,7 +126,7 @@ def function_main_scrap(file_source_name):
             flag = False
 
     product_group_qinn.extend(product_group_lan)  # 使用extend合并list
-    product_sort_sum(product_group_qinn, product_sum_qinn, product_sum_lan)
+    product_sort_sum(product_group_qinn, product_sum_qinn, product_sum_lan,file_source_name)
 
 
 def load_file():
