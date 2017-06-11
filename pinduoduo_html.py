@@ -11,6 +11,8 @@ from tkinter.filedialog import askopenfilename
 '''
 
 # 输出测试
+
+
 def request_url_print(product_id):
     url = "http://mobile.yangkeduo.com/goods.html?goods_id=%s" % product_id
     r = requests.get(url)
@@ -38,13 +40,15 @@ def request_url_print(product_id):
 
 # 加载对应的商品列表详情
 
+
 def request_url(product_id, goods_item_price_sum=0):
     if len(product_id) == 0:  # 判断分割好的情况
         return goods_item_price_sum, None
     product_list = []  # 存储多个开团的情况
 
-    product_id_list=product_id.split('-')
-    url = "http://mobile.yangkeduo.com/goods.html?goods_id=%s" % product_id_list[0]
+    product_id_list = product_id.split('-')
+    url = "http://mobile.yangkeduo.com/goods.html?goods_id=%s" % product_id_list[
+        0]
     r = requests.get(url)
     soup = BeautifulSoup(r.text)
     # 获取名字
@@ -53,17 +57,23 @@ def request_url(product_id, goods_item_price_sum=0):
     time_text_list = soup.findAll("span", {"class": "local-group-timer"})
 
     for nick_name_text, time_text in zip(name_text_list, time_text_list):
-        product_name, product_price = request_product(product_id_list[0])  # 获取商品的信息
+        product_name, product_price = request_product(
+            product_id_list[0])  # 获取商品的信息
+        time_tmp=time_text.get_text()
         goods_item_price_sum = goods_item_price_sum + product_price  # 逐个求和
         product_info = url + "\r\n" + product_name + "\r\n" + nick_name_text.get_text() + "\r\n" + str(
-            product_price) + "\r\n" + time_text.get_text() + "\r\n"
+            product_price) + "\r\n" + time_tmp + "\r\n"
+        # 计算时间，按时间的顺序进行排列==》按=》还差1人，剩余xx:xx:xx=》进行过滤
+        time_tmp_list=time_tmp[7:].split(":")
+        # print(time_tmp_list)
+        time_stamp=int(time_tmp_list[0])*3600+int(time_tmp_list[1])*60+float(time_tmp_list[2])
         product_list.append(dict(product_info=product_info,
-                                 time_stamp=0))
+                                 time_stamp=time_stamp))
     return goods_item_price_sum, product_list  # 返回总金额，商品信息列表
 
 # 获取商品信息
 def request_product(product_id, goods_item_price=0):
-    product_id_list=product_id
+    product_id_list = product_id
     url = "http://apiv2.yangkeduo.com/v2/goods/%s" % product_id_list
     r = requests.get(url)
     json_raw = r.json()
@@ -80,23 +90,28 @@ def read_product_id(file_path):
         return file_object.readlines()
 
 # 输出拼团的信息
-def write_product_spell_group(info_list,file_source_name):
-    now=datetime.now()
-    output_str=file_source_name.split("/")[-1][:-4]+now.strftime('-%y-%m-%d-%H')+".txt"
+
+
+def write_product_spell_group(info_list, file_source_name):
+    now = datetime.now()
+    output_str = file_source_name.split(
+        "/")[-1][:-4] + now.strftime('-%y-%m-%d-%H') + ".txt"
     with open("./pdd_output/%s" % output_str, "w+", encoding='utf-8') as f:
         for index in range(0, len(info_list)):
             f.write(info_list[index]["product_info"] + "\n")
 
 # 计算金额和排序
-def product_sort_sum(product_group, product_sum_qinn, product_sum_lan,file_source_name):
+
+
+def product_sort_sum(product_group, product_sum_qinn, product_sum_lan, file_source_name):
     if len(product_group):
-        # L = sorted(product_group, key=lambda s: s["time_stamp"]) # 依靠时间排序
-        L = product_group
+        L = sorted(product_group, key=lambda s: s["time_stamp"]) # 依靠时间排序
+        # L = product_group
 
         L.append(dict(product_info="亲恩总金额：" + str(product_sum_qinn)))
         L.append(dict(product_info="兰可欣总金额：" + str(product_sum_lan)))
 
-        write_product_spell_group(L,file_source_name)
+        write_product_spell_group(L, file_source_name)
     else:
         print(product_group.append("暂时无任何的开团情况"))
 
@@ -126,7 +141,8 @@ def function_main_scrap(file_source_name):
             flag = False
 
     product_group_qinn.extend(product_group_lan)  # 使用extend合并list
-    product_sort_sum(product_group_qinn, product_sum_qinn, product_sum_lan,file_source_name)
+    product_sort_sum(product_group_qinn, product_sum_qinn,
+                     product_sum_lan, file_source_name)
 
 
 def load_file():
