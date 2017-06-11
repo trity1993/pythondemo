@@ -46,7 +46,8 @@ def request_url(product_id, goods_item_price_sum=0):
         return goods_item_price_sum, None
     product_list = []  # 存储多个开团的情况
 
-    url = "http://mobile.yangkeduo.com/goods.html?goods_id=%s" % product_id
+    product_id_list=product_id.split('-')
+    url = "http://mobile.yangkeduo.com/goods.html?goods_id=%s" % product_id_list[0]
     r = requests.get(url)
     soup = BeautifulSoup(r.text)
     # 获取名字
@@ -55,7 +56,7 @@ def request_url(product_id, goods_item_price_sum=0):
     time_text_list = soup.findAll("span", {"class": "local-group-timer"})
 
     for nick_name_text, time_text in zip(name_text_list, time_text_list):
-        product_name, product_price = request_product(product_id)  # 获取商品的信息
+        product_name, product_price = request_product(product_id_list[0])  # 获取商品的信息
         goods_item_price_sum = goods_item_price_sum + product_price  # 逐个求和
         product_info = url + "\r\n" + product_name + "\r\n" + nick_name_text.get_text() + "\r\n" + str(
             product_price) + "\r\n" + time_text.get_text() + "\r\n"
@@ -67,8 +68,8 @@ def request_url(product_id, goods_item_price_sum=0):
 
 
 def request_product(product_id, goods_item_price=0):
-    product_id_list=product_id.split('-')
-    url = "http://apiv2.yangkeduo.com/v2/goods/%s" % product_id_list[0]
+    product_id_list=product_id
+    url = "http://apiv2.yangkeduo.com/v2/goods/%s" % product_id_list
     r = requests.get(url)
     json_raw = r.json()
     group_product_item = json_raw["group"]
